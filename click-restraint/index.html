@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Search</title>
+<style>
+/* Simulated search results pages with AI overviews, recreated from 2026 screenshots. Light theme only by choice.
+   Two searches live on one page; #microwave and #phone pick which one shows. */
+:root {
+  --bg: #ffffff;
+  --fg: #1f1f1f;
+  --muted: #4d5156;
+  --faint: #70757a;
+  --line: #e3e3e3;
+  --field: #f1f3f4;
+  --panel: #f3f6fc;
+  --highlight: #d3e3fd;
+  --link: #1a0dab;
+  --visited: #681da8;
+  --chip: #eef0f3;
+  --font: "Google Sans", Roboto, Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 10px 40px;
+}
+.wrap { max-width: 1100px; margin: 0 auto; }
+
+/* Example switcher: deliberately quiet so it doesn't compete with the results */
+.switch { display: flex; justify-content: flex-end; gap: 4px; font-size: 12px; margin-bottom: 10px; }
+.switch a { color: var(--faint); text-decoration: none; padding: 3px 10px; border-radius: 999px; }
+.switch a[aria-current="page"] { background: var(--field); color: var(--muted); }
+.switch a:hover { color: var(--fg); }
+
+.top { display: flex; align-items: center; gap: 24px; }
+.logo { font-size: 24px; font-weight: 500; letter-spacing: -.5px; flex: none; color: #5f6368; }
+.search { flex: 1; max-width: 690px; min-width: 0; display: flex; align-items: center; gap: 14px; background: var(--bg); border: 1px solid #dfe1e5; box-shadow: 0 1px 6px rgba(32,33,36,.18); border-radius: 999px; padding: 11px 20px; font-size: 16px; }
+.search span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search svg { width: 20px; height: 20px; flex: none; color: #4285f4; }
+.tabs { white-space: nowrap; display: flex; gap: 24px; margin: 14px 0 0; padding: 0 2px 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); overflow-x: auto; }
+.tabs .on { color: var(--fg); border-bottom: 3px solid var(--fg); padding-bottom: 7px; margin-bottom: -11px; font-weight: 500; }
+
+.view[hidden] { display: none; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; margin-top: 22px; }
+.main { min-width: 0; max-width: 680px; }
+
+/* AI overview */
+.ov-head { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 500; margin-bottom: 14px; }
+.ov-head svg { width: 22px; height: 22px; }
+.ov p, .ov li { font-size: 16px; line-height: 1.65; margin: 0 0 14px; }
+.ov h3 { font-size: 20px; font-weight: 500; margin: 22px 0 12px; }
+.ov ul { margin: 0 0 14px; padding-left: 22px; }
+.hl { background: var(--highlight); border-radius: 4px; padding: 1px 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.u { color: var(--link); text-decoration: underline; }
+.chip { display: inline-flex; align-items: center; gap: 5px; vertical-align: 1px; margin-left: 6px; background: var(--chip); color: var(--muted); text-decoration: none; font-size: 12.5px; padding: 2px 9px 2px 4px; border-radius: 999px; line-height: 1.4; white-space: nowrap; }
+a.chip:hover { background: #e2e5ea; color: var(--fg); }
+.ov-foot { font-size: 12px; color: var(--faint); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 8px; }
+
+/* favicon stand-ins */
+.fav { flex: none; width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 9px; font-weight: 700; color: #fff; background: #9aa0a6; }
+.chip .fav { width: 16px; height: 16px; font-size: 8px; }
+.f-cbs { background: #222; } .f-kas { background: #00a88e; } .f-yt { background: #ff0033; } .f-fb { background: #1877f2; }
+.f-bp { background: #2c6e8f; } .f-ajm { background: #2e7d32; } .f-red { background: #ff4500; } .f-quo { background: #b92b27; }
+.f-har { background: #a51c30; } .f-del { background: #111; } .f-esa { background: #0b2d6b; } .f-nor { background: #f2c200; color: #111; }
+.f-sec { background: #3b5998; } .f-sorg { background: #3c4ad6; }
+
+/* video card inside overview */
+.vcard { display: flex; gap: 14px; align-items: flex-start; margin: 4px 0 18px; }
+.thumb { flex: none; position: relative; width: 168px; height: 96px; border-radius: 10px; background: linear-gradient(135deg, #c9ced6, #a7aeb9); }
+.thumb.sm { width: 120px; height: 68px; border-radius: 8px; }
+.dur { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font-size: 11px; padding: 1px 5px; border-radius: 4px; }
+.vcard .t { color: var(--link); text-decoration: underline; font-size: 16px; }
+.meta { font-size: 13px; color: var(--faint); margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+/* sources panel */
+.panel { align-self: start; background: var(--panel); border-radius: 16px; padding: 14px 16px 16px; }
+.panel-head { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+.stack { display: flex; }
+.stack .fav { border: 2px solid var(--panel); margin-right: -6px; width: 22px; height: 22px; }
+.stack + span { margin-left: 10px; }
+.src { display: block; padding: 10px 0 12px; border-bottom: 1px solid #dde3ec; color: inherit; text-decoration: none; }
+.src:last-of-type { border-bottom: 0; }
+.src-row { display: flex; gap: 12px; }
+.src-row > div { min-width: 0; flex: 1; }
+.src-title { font-size: 15px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+a.src:hover .src-title { text-decoration: underline; }
+.src-snip { font-size: 13px; color: var(--muted); line-height: 1.4; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.src .thumb { width: 84px; height: 64px; }
+.src-site { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-top: 10px; }
+.showall { display: block; text-align: center; background: #e1e7f0; border-radius: 999px; padding: 9px; font-size: 14px; color: var(--fg); margin-top: 6px; }
+
+/* organic results */
+.results { margin-top: 28px; }
+.res { margin-bottom: 28px; }
+.site { display: flex; align-items: center; gap: 12px; }
+.site .fav { width: 28px; height: 28px; font-size: 11px; }
+.site-name { font-size: 14px; line-height: 1.3; }
+.site-url { font-size: 12px; color: var(--muted); }
+.res h3 { font-size: 20px; font-weight: 400; margin: 6px 0 4px; line-height: 1.3; }
+.res h3 a, .res h3 span { color: var(--link); text-decoration: none; }
+.res h3 a:hover { text-decoration: underline; }
+.res h3 a:visited { color: var(--visited); }
+.snip { font-size: 14px; line-height: 1.58; color: var(--muted); margin: 0; }
+.snip b { color: #3c4043; }
+.date { color: var(--faint); }
+.rm { color: var(--muted); text-decoration: underline; }
+.block h2 { font-size: 20px; font-weight: 400; margin: 0 0 12px; }
+.forum { border-top: 1px solid var(--line); padding: 12px 0; }
+.forum-title { color: var(--link); font-size: 16px; }
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.answers .more { color: var(--link); }
+.seemore { display: block; width: 60%; margin: 6px auto 0; text-align: center; background: var(--field); border-radius: 999px; padding: 8px; font-size: 14px; }
+.vid { display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+.vid:first-of-type { border-top: 0; }
+.vid .t { color: var(--link); font-size: 16px; line-height: 1.35; }
+.foot { margin-top: 30px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+
+a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 900px) {
+  .cols { grid-template-columns: 1fr; gap: 24px; }
+  .panel { order: 2; }
+}
+@media (max-width: 560px) {
+  .logo { display: none; }
+  .answers { grid-template-columns: 1fr; }
+  .thumb { width: 120px; height: 70px; }
+  .res h3 { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="switch" aria-label="Choose example">
+    <a href="#microwave" data-view="microwave">Microwave plastic</a>
+    <a href="#phone" data-view="phone">Phone listening</a>
+  </nav>
+
+  <!-- ===================== Search 1: microwave plastic ===================== -->
+  <section class="view" id="view-microwave" aria-label="Search results: is it safe to microwave plastic">
+    <div class="top">
+      <div class="logo" aria-hidden="true">Search</div>
+      <div class="search" role="search" aria-label="Search query">
+        <span>is it safe to microwave plastic</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </div>
+    </div>
+    <nav class="tabs" aria-hidden="true"><span>AI Mode</span><span class="on">All</span><span>Images</span><span>Short videos</span><span>Shopping</span><span>Forums</span><span>Videos</span><span>More</span></nav>
+
+    <div class="cols">
+      <div class="main">
+        <section class="ov" aria-label="AI Overview">
+          <div class="ov-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4f7cf5" d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5z"/></svg>AI Overview</div>
+          <p><span class="hl"><b>No, it is generally not recommended to microwave plastic.</b></span></p>
+          <p>While containers labeled <b>"microwave safe"</b> are tested by the <span class="u">FDA</span> to ensure they will not melt or warp from the heat, health experts increasingly warn that heating plastics can still release <b>microplastics, nanoplastics, and endocrine-disrupting chemicals</b> directly into your food.<span class="chip"><span class="fav f-bp">BP</span>Beyond Plastics +3</span></p>
+          <h3>The Hidden Risks of Heating Plastic</h3>
+          <ul>
+            <li><b>Chemical Leaching:</b> Heat causes chemical additives like <b>Bisphenol A (BPA) and phthalates</b> to migrate out of the plastic and contaminate your food. These act as endocrine disruptors that mimic or block natural hormones.</li>
+          </ul>
+          <div class="ov-foot">AI responses may include mistakes.</div>
+        </section>
+
+        <section class="results" aria-label="Search results">
+          <div class="res">
+            <div class="site"><span class="fav f-ajm">AJM</span><div><div class="site-name">The American Journal of Medicine</div><div class="site-url">https://www.amjmed.com › article › fulltext</div></div></div>
+            <h3><span>Microwaving Food in Plastic Containers</span></h3>
+            <p class="snip"><span class="date">by JS Alpert · 2023 · Cited by 3 — </span>Over many years, we have been warned <b>not to heat food in plastic containers in the microwave oven</b> because this can result in migration of ... <span class="rm">Read more</span></p>
+          </div>
+
+          <div class="res block">
+            <h2>Discussions and forums</h2>
+            <div class="forum">
+              <div class="forum-title">Plastic in the microwave, is there really any danger to it?</div>
+              <div class="meta"><span class="fav f-red">r</span>Reddit · r/askscience · 7 comments · 15 years ago</div>
+              <div class="answers">
+                <div>The majority of plastics can withstand microwave radiation and won't break down nor melt. If ... <span class="more">More ›</span><div class="meta">Top answer · 32 votes · 15 years ago</div></div>
+                <div>One of the problems with plastics as food containers is plasticizer leaching. The reason old ... <span class="more">More ›</span><div class="meta">15 years ago</div></div>
+              </div>
+            </div>
+            <div class="forum">
+              <div class="forum-title">How can some plastics be safe in the microwave? It seems very unsafe to ...</div>
+              <div class="meta"><span class="fav f-quo">Q</span>Quora · 4 answers · 2 years ago</div>
+            </div>
+            <div class="forum">
+              <div class="forum-title">Can I microwave food in plastic containers?</div>
+              <div class="meta"><span class="fav f-quo">Q</span>Quora · 10+ answers · 2 years ago</div>
+            </div>
+            <span class="seemore">See more ›</span>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-har">H</span><div><div class="site-name">Harvard Health</div><div class="site-url">https://www.health.harvard.edu › microwaving-food-in...</div></div></div>
+            <h3><span>Microwaving food in plastic: Dangerous or not?</span></h3>
+            <p class="snip"><span class="date">Sep 20, 2017 — </span>When food is wrapped in plastic or placed in a plastic container and microwaved, <b>BPA and phthalates may leak into the food</b>. Any migration is ... <span class="rm">Read more</span></p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-red">r</span><div><div class="site-name">Reddit · r/Cooking</div><div class="site-url">40+ comments · 2 years ago</div></div></div>
+            <h3><span>Do people really microwave plastic in the microwave?</span></h3>
+            <p class="snip"><b>Some plastics are microwave safe</b>; others are not and melt or otherwise deform. Plastic wrap is fine-especially if it's just used as a 'lid'. <span class="rm">Read more</span></p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="panel" aria-label="Sources">
+        <div class="panel-head"><span class="stack" aria-hidden="true"><span class="fav f-fb">f</span><span class="fav f-bp">BP</span><span class="fav f-sec">=</span></span><span>12 sites</span></div>
+        <div class="src">
+          <div class="src-row"><div><div class="src-title">Is It Safe To Microwave Plastic Containers? | Andrew Huberman</div><div class="src-snip">is it true that microwave safe means it just means that the…</div></div><div class="thumb"><span class="dur">▶ 0:56</span></div></div>
+          <div class="src-site"><span class="fav f-fb">f</span>Facebook · Andrew Huberman</div>
+        </div>
+        <div class="src">
+          <div class="src-row"><div><div class="src-title">Why You Should Never Microwave Food In Plastic - Beyond Plastics</div><div class="src-snip">Many of the chemicals that leach out of plastics into food…</div></div><div class="thumb"></div></div>
+          <div class="src-site"><span class="fav f-bp">BP</span>Beyond Plastics</div>
+        </div>
+        <span class="showall">Show all</span>
+      </aside>
+    </div>
+    <p class="foot">Simulated search results for classroom use, recreated from a real search. Results for this search change over time.</p>
+  </section>
+
+  <!-- ===================== Search 2: phone listening ===================== -->
+  <section class="view" id="view-phone" aria-label="Search results: is my phone listening to my conversations for ads" hidden>
+    <div class="top">
+      <div class="logo" aria-hidden="true">Search</div>
+      <div class="search" role="search" aria-label="Search query">
+        <span>is my phone listening to my conversations for ads</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </div>
+    </div>
+    <nav class="tabs" aria-hidden="true"><span>AI Mode</span><span class="on">All</span><span>Images</span><span>Short videos</span><span>Videos</span><span>News</span><span>More</span></nav>
+
+    <div class="cols">
+      <div class="main">
+        <section class="ov" aria-label="AI Overview">
+          <div class="ov-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4f7cf5" d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5z"/></svg>AI Overview</div>
+          <p><span class="hl">No, your phone is not passively recording your everyday conversations to serve you ads</span>. Listening to and transcribing billions of people's conversations would be technically impossible and drain your battery. Instead, companies use sophisticated algorithms to predict what you will talk about next.<a class="chip" href="https://www.cbsnews.com/news/is-your-phone-listening-to-you/" target="_blank" rel="noopener"><span class="fav f-cbs">◉</span>CBS News +4</a></p>
+          <h3>Why You See Eerily Accurate Ads</h3>
+          <ul>
+            <li><b>Hyper-Detailed Profiles:</b> Tech companies track your age, location, web searches, clicks, and the things your friends and family search for. If you live with someone and they search for a product, you will likely see ads for it too.<a class="chip" href="https://www.cbsnews.com/news/is-your-phone-listening-to-you/" target="_blank" rel="noopener"><span class="fav f-cbs">◉</span>CBS News +1</a></li>
+            <li><b>The "Frequency Illusion":</b> You see thousands of ads a day that mean nothing to you and forget them. You only notice the ones that happen to align with a recent conversation, creating the illusion of eavesdropping.<span class="chip"><span class="fav f-kas">K</span>Kaspersky</span></li>
+          </ul>
+          <p>For a deep dive into how algorithms predict your habits without actually listening:</p>
+          <div class="vcard">
+            <div class="thumb"><span class="dur">4:41</span></div>
+            <div><span class="t">Is your phone listening to you?</span><div class="meta">71K views · 3 months ago</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · CBS Sunday Morning</div></div>
+          </div>
+          <h3>How to Take Control of Your Privacy</h3>
+          <p>While your phone isn't actively spying for ads, many apps legitimately collect far more of your data than necessary. You can reduce your digital footprint in your device's settings:<span class="chip"><span class="fav f-kas">K</span>Kaspersky +1</span></p>
+          <ul>
+            <li><b>Check permissions:</b> Go to your phone's settings and revoke microphone access for any app that doesn't strictly need it (like social media or shopping apps).<span class="chip"><span class="fav f-yt">▶</span>YouTube · Romina Gafur</span></li>
+          </ul>
+          <div class="ov-foot">AI responses may include mistakes.</div>
+        </section>
+
+        <section class="results" aria-label="Search results">
+          <div class="res">
+            <div class="site"><span class="fav f-red">r</span><div><div class="site-name">Reddit · r/AskTechnology</div><div class="site-url">30+ comments · 4 years ago</div></div></div>
+            <h3><span>Didn't believe it till now, I think my phone is listening to me ...</span></h3>
+            <p class="snip">So the real question, is my phone listening to my conversations? I always found ads funny in the way they are so perfect at targeting your wants and needs, ...</p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-cbs">◉</span><div><div class="site-name">CBS News</div><div class="site-url">https://www.cbsnews.com › Sunday Morning</div></div></div>
+            <h3><a href="https://www.cbsnews.com/news/is-your-phone-listening-to-you/" target="_blank" rel="noopener">Is your phone listening to you?</a></h3>
+            <p class="snip"><span class="date">Apr 12, 2026 — </span>So, <b>is your phone listening</b> to you? "It is not," said Ari Paparo, an <b>ad</b> industry veteran, consultant and author. "I've been asked about this a ... <span class="rm">Read more</span></p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-del">D.</span><div><div class="site-name">Deloitte Digital</div><div class="site-url">https://www.deloittedigital.com › insights › perspective</div></div></div>
+            <h3><span>Is your phone listening to your conversations?</span></h3>
+            <p class="snip"><b>Your phone might listen to your conversations mainly for 3 reasons</b>: To tackle verbal demands in the case of voice assistant; To collect data about yourself</p>
+          </div>
+
+          <div class="res block">
+            <h2>Videos</h2>
+            <div class="vid"><div class="thumb sm"><span class="dur">4:41</span></div><div><div class="t">Is your phone listening to you?</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · CBS Sunday Morning · Apr 12, 2026</div><p class="snip" style="margin-top:6px">No, <b>your phone</b> isn't spying on you for <b>ads</b>. Advertisers infer <b>your</b> interests from online activity, not by <b>listening to your conversations</b>.</p></div></div>
+            <div class="vid"><div class="thumb sm"><span class="dur">24:52</span></div><div><div class="t">You are wrong about your phone listening to your conversations</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · Liron Segev · Jan 4, 2025</div></div></div>
+            <div class="vid"><div class="thumb sm"><span class="dur">9:50</span></div><div><div class="t">Your phone hears EVERYTHING (here's how to fix it)</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · All Things Secured · Dec 11, 2025</div></div></div>
+            <div class="vid"><div class="thumb sm"><span class="dur">4:41</span></div><div><div class="t">Is your phone listening to you? When ads for products pop up ...</div><div class="meta"><span class="fav f-fb">f</span>Facebook · CBS Sunday Morning · Apr 12, 2026</div></div></div>
+            <span class="seemore">View all ›</span>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-esa">E</span><div><div class="site-name">Esade</div><div class="site-url">https://dobetter.esade.edu › phone-listening-personalize...</div></div></div>
+            <h3><span>Is your phone listening to you to sell personalized ads?</span></h3>
+            <p class="snip"><span class="date">Jun 29, 2023 — </span><b>Yes, your phone is recording you.</b> In 100 percent of the observations, at least one ad related to the general subject discussed (the tourism ... <span class="rm">Read more</span></p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-quo">Q</span><div><div class="site-name">Quora</div><div class="site-url">3 answers · 2 years ago</div></div></div>
+            <h3><span>Does my phone listen to my conversations to target ...</span></h3>
+            <p class="snip">Does my phone listen to my conversations to target relevant ads?<br><span style="color:var(--link)">3 answers</span> · Top answer: Same here. Surely someone very technical has figured this out by now, but m...</p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-nor">✓</span><div><div class="site-name">Norton</div><div class="site-url">https://us.norton.com › Blog Home › Digital Life</div></div></div>
+            <h3><span>Is my phone listening to me? Not how you think</span></h3>
+            <p class="snip"><span class="date">Jun 26, 2026 — </span>In reality, there's little evidence that smartphones routinely record private <b>conversations for advertising</b> purposes. Instead, the ... <span class="rm">Read more</span></p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-sec">⚙</span><div><div class="site-name">Information Security Stack Exchange</div><div class="site-url">https://security.stackexchange.com › questions › do-adv...</div></div></div>
+            <h3><span>Do advertisers listen as we talk?</span></h3>
+            <p class="snip"><span class="date">Jul 25, 2020 — </span>A person talks about a certain thing (product or service) with another person and a short time after the talk the person gets the advertising of the discussed ...<br><span style="color:var(--link)">9 answers</span> · Top answer: Listening using the microphone is unlikely Listening secretly without consent ...</p>
+          </div>
+
+          <div class="res">
+            <div class="site"><span class="fav f-sorg">S</span><div><div class="site-name">Security.org</div><div class="site-url">https://www.security.org › Digital Safety</div></div></div>
+            <h3><span>Is My Phone Listening to Me? What the Evidence Says</span></h3>
+            <p class="snip">There's no concrete evidence that a major <b>ad</b> platform has secretly fed <b>your</b> microphone audio into its <b>ad</b>-targeting engine. Google, Meta, and Amazon all deny ... <span class="rm">Read more</span></p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="panel" aria-label="Sources">
+        <div class="panel-head"><span class="stack" aria-hidden="true"><span class="fav f-cbs">◉</span><span class="fav f-kas">K</span><span class="fav f-yt">▶</span></span><span>5 sites</span></div>
+        <a class="src" href="https://www.cbsnews.com/news/is-your-phone-listening-to-you/" target="_blank" rel="noopener">
+          <div class="src-row"><div><div class="src-title">Is your phone listening to you? - CBS News</div><div class="src-snip">Read Full Bio. David Pogue. April 12, 2026 / 9:56 AM EDT / CBS News. A lot of people…</div></div><div class="thumb"></div></div>
+          <div class="src-site"><span class="fav f-cbs">◉</span>CBS News</div>
+        </a>
+        <div class="src">
+          <div class="src-row"><div><div class="src-title">Is Your Phone Listening to You? the Truth About Ads and Privacy</div><div class="src-snip">Does Your Phone Listen to You? You mention running shoes to a friend, put your phone…</div></div><div class="thumb"></div></div>
+          <div class="src-site"><span class="fav f-kas">K</span>Kaspersky</div>
+        </div>
+        <div class="src">
+          <div class="src-row"><div><div class="src-title">Your phone is always listening to you! Do this to…</div><div class="src-snip">did you know that your phone is always listening to you sometim…</div></div><div class="thumb"><span class="dur">▶ 0:52</span></div></div>
+          <div class="src-site"><span class="fav f-yt">▶</span>YouTube · Romina Gafur</div>
+        </div>
+        <span class="showall">Show all</span>
+      </aside>
+    </div>
+    <p class="foot">Simulated search results for classroom use, recreated from a real search. Results for this search change over time.</p>
+  </section>
+</div>
+
+<script>
+// Show one search at a time. #microwave (default) or #phone.
+const views = { microwave: document.getElementById('view-microwave'), phone: document.getElementById('view-phone') };
+function show() {
+  const key = location.hash.slice(1) in views ? location.hash.slice(1) : 'microwave';
+  for (const [k, el] of Object.entries(views)) el.hidden = k !== key;
+  document.querySelectorAll('.switch a').forEach(a => {
+    if (a.dataset.view === key) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  document.title = key === 'phone' ? 'is my phone listening to my conversations for ads - Search' : 'is it safe to microwave plastic - Search';
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', show);
+show();
+</script>
+</body>
+</html>
