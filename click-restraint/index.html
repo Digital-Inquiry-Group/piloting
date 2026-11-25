@@ -77,7 +77,8 @@ a.chip:hover { background: #e2e5ea; color: var(--fg); }
 .thumb.sm { width: 120px; height: 68px; border-radius: 8px; }
 .dur { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.72); color: #fff; font-size: 11px; padding: 1px 5px; border-radius: 4px; }
 .vcard .t { color: var(--link); text-decoration: underline; font-size: 16px; }
-.meta { font-size: 13px; color: var(--faint); margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.meta { font-size: 13px; color: var(--faint); margin-top: 4px; }
+.meta .fav { vertical-align: -4px; margin-right: 6px; }
 
 /* sources panel */
 .panel { align-self: start; background: var(--panel); border-radius: 16px; padding: 14px 16px 16px; }
@@ -122,6 +123,11 @@ a.src:hover .src-title { text-decoration: underline; }
 .vid .t { color: var(--link); font-size: 16px; line-height: 1.35; }
 .foot { margin-top: 30px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
 
+img.thumb { display: block; object-fit: cover; background: #e8eaed; }
+/* Hover: everything styled as a link underlines, so the page behaves consistently */
+.res h3 a:hover, .res h3 span:hover, .forum-title:hover, .vid .t:hover, .src:hover .src-title,
+.more:hover, .answers .more:hover, .chip:hover, .site:hover .site-name { text-decoration: underline; }
+.vcard .t:hover, .u:hover, .rm:hover { text-decoration-thickness: 2px; }
 a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius: 4px; }
 
 @media (max-width: 900px) {
@@ -212,11 +218,11 @@ a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius
       <aside class="panel" aria-label="Sources">
         <div class="panel-head"><span class="stack" aria-hidden="true"><span class="fav f-fb">f</span><span class="fav f-bp">BP</span><span class="fav f-sec">=</span></span><span>12 sites</span></div>
         <div class="src">
-          <div class="src-row"><div><div class="src-title">Is It Safe To Microwave Plastic Containers? | Andrew Huberman</div><div class="src-snip">is it true that microwave safe means it just means that the…</div></div><div class="thumb"><span class="dur">▶ 0:56</span></div></div>
+          <div class="src-row"><div><div class="src-title">Is It Safe To Microwave Plastic Containers? | Andrew Huberman</div><div class="src-snip">is it true that microwave safe means it just means that the…</div></div><img class="thumb" src="img/mw-huberman.jpg" alt="" loading="lazy"></div>
           <div class="src-site"><span class="fav f-fb">f</span>Facebook · Andrew Huberman</div>
         </div>
         <div class="src">
-          <div class="src-row"><div><div class="src-title">Why You Should Never Microwave Food In Plastic - Beyond Plastics</div><div class="src-snip">Many of the chemicals that leach out of plastics into food…</div></div><div class="thumb"></div></div>
+          <div class="src-row"><div><div class="src-title">Why You Should Never Microwave Food In Plastic - Beyond Plastics</div><div class="src-snip">Many of the chemicals that leach out of plastics into food…</div></div><img class="thumb" src="img/mw-beyond.jpg" alt="" loading="lazy"></div>
           <div class="src-site"><span class="fav f-bp">BP</span>Beyond Plastics</div>
         </div>
         <span class="showall">Show all</span>
@@ -248,7 +254,7 @@ a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius
           </ul>
           <p>For a deep dive into how algorithms predict your habits without actually listening:</p>
           <div class="vcard">
-            <div class="thumb"><span class="dur">4:41</span></div>
+            <img class="thumb" src="img/ph-ov-cbs.jpg" alt="" loading="lazy">
             <div><span class="t">Is your phone listening to you?</span><div class="meta">71K views · 3 months ago</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · CBS Sunday Morning</div></div>
           </div>
           <h3>How to Take Control of Your Privacy</h3>
@@ -280,10 +286,10 @@ a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius
 
           <div class="res block">
             <h2>Videos</h2>
-            <div class="vid"><div class="thumb sm"><span class="dur">4:41</span></div><div><div class="t">Is your phone listening to you?</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · CBS Sunday Morning · Apr 12, 2026</div><p class="snip" style="margin-top:6px">No, <b>your phone</b> isn't spying on you for <b>ads</b>. Advertisers infer <b>your</b> interests from online activity, not by <b>listening to your conversations</b>.</p></div></div>
-            <div class="vid"><div class="thumb sm"><span class="dur">24:52</span></div><div><div class="t">You are wrong about your phone listening to your conversations</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · Liron Segev · Jan 4, 2025</div></div></div>
-            <div class="vid"><div class="thumb sm"><span class="dur">9:50</span></div><div><div class="t">Your phone hears EVERYTHING (here's how to fix it)</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · All Things Secured · Dec 11, 2025</div></div></div>
-            <div class="vid"><div class="thumb sm"><span class="dur">4:41</span></div><div><div class="t">Is your phone listening to you? When ads for products pop up ...</div><div class="meta"><span class="fav f-fb">f</span>Facebook · CBS Sunday Morning · Apr 12, 2026</div></div></div>
+            <div class="vid"><img class="thumb sm" src="img/ph-v1.jpg" alt="" loading="lazy"><div><div class="t">Is your phone listening to you?</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · CBS Sunday Morning · Apr 12, 2026</div><p class="snip" style="margin-top:6px">No, <b>your phone</b> isn't spying on you for <b>ads</b>. Advertisers infer <b>your</b> interests from online activity, not by <b>listening to your conversations</b>.</p></div></div>
+            <div class="vid"><img class="thumb sm" src="img/ph-v2.jpg" alt="" loading="lazy"><div><div class="t">You are wrong about your phone listening to your conversations</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · Liron Segev · Jan 4, 2025</div></div></div>
+            <div class="vid"><img class="thumb sm" src="img/ph-v3.jpg" alt="" loading="lazy"><div><div class="t">Your phone hears EVERYTHING (here's how to fix it)</div><div class="meta"><span class="fav f-yt">▶</span>YouTube · All Things Secured · Dec 11, 2025</div></div></div>
+            <div class="vid"><img class="thumb sm" src="img/ph-v4.jpg" alt="" loading="lazy"><div><div class="t">Is your phone listening to you? When ads for products pop up ...</div><div class="meta"><span class="fav f-fb">f</span>Facebook · CBS Sunday Morning · Apr 12, 2026</div></div></div>
             <span class="seemore">View all ›</span>
           </div>
 
@@ -322,15 +328,15 @@ a:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; border-radius
       <aside class="panel" aria-label="Sources">
         <div class="panel-head"><span class="stack" aria-hidden="true"><span class="fav f-cbs">◉</span><span class="fav f-kas">K</span><span class="fav f-yt">▶</span></span><span>5 sites</span></div>
         <a class="src" href="https://www.cbsnews.com/news/is-your-phone-listening-to-you/" target="_blank" rel="noopener">
-          <div class="src-row"><div><div class="src-title">Is your phone listening to you? - CBS News</div><div class="src-snip">Read Full Bio. David Pogue. April 12, 2026 / 9:56 AM EDT / CBS News. A lot of people…</div></div><div class="thumb"></div></div>
+          <div class="src-row"><div><div class="src-title">Is your phone listening to you? - CBS News</div><div class="src-snip">Read Full Bio. David Pogue. April 12, 2026 / 9:56 AM EDT / CBS News. A lot of people…</div></div><img class="thumb" src="img/ph-src-cbs.jpg" alt="" loading="lazy"></div>
           <div class="src-site"><span class="fav f-cbs">◉</span>CBS News</div>
         </a>
         <div class="src">
-          <div class="src-row"><div><div class="src-title">Is Your Phone Listening to You? the Truth About Ads and Privacy</div><div class="src-snip">Does Your Phone Listen to You? You mention running shoes to a friend, put your phone…</div></div><div class="thumb"></div></div>
+          <div class="src-row"><div><div class="src-title">Is Your Phone Listening to You? the Truth About Ads and Privacy</div><div class="src-snip">Does Your Phone Listen to You? You mention running shoes to a friend, put your phone…</div></div><img class="thumb" src="img/ph-src-kas.jpg" alt="" loading="lazy"></div>
           <div class="src-site"><span class="fav f-kas">K</span>Kaspersky</div>
         </div>
         <div class="src">
-          <div class="src-row"><div><div class="src-title">Your phone is always listening to you! Do this to…</div><div class="src-snip">did you know that your phone is always listening to you sometim…</div></div><div class="thumb"><span class="dur">▶ 0:52</span></div></div>
+          <div class="src-row"><div><div class="src-title">Your phone is always listening to you! Do this to…</div><div class="src-snip">did you know that your phone is always listening to you sometim…</div></div><img class="thumb" src="img/ph-src-yt.jpg" alt="" loading="lazy"></div>
           <div class="src-site"><span class="fav f-yt">▶</span>YouTube · Romina Gafur</div>
         </div>
         <span class="showall">Show all</span>
